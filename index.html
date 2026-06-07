@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="title" content="The Repair Dan - Phone, Console & Bike Repair Bridgend" />
+        <meta
+            name="description"
+            content="Mobile phone repair, gaming console repair, and bicycle repair in Bridgend. Same-day service on in-stock parts, fixed prices, no hidden fees. Call 07392 277182."
+        />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://therepardan.replit.dev/" />
+        <title>The Repair Dan | Bridgend</title>
+        <link rel="stylesheet" href="style.css" />
+        <script src="script.js" type="text/javascript" defer></script>
+    </head>
+    <body>
+        <div class="app-container">
+            <header class="app-header">
+                <div class="logo-area">
+                    <div class="spinning-gear">⚙</div>
+                    <img
+                        src="/logo.png"
+                        alt="The Repair Dan logo"
+                        class="site-logo"
+                    />
+                    <p class="location">
+                        📍 Your Local Bridgend Repair Specialist
+                    </p>
+                    <p class="phone-header">📞 07392 277182</p>
+                </div>
+                <div class="slogan-box">
+                    <p class="slogan">
+                        🛠️ Same‑day service (on in-stock parts) | ✅ Fixed prices – no hidden fees | 🛡️ 3-Month Warranty
+                    </p>
+                </div>
+            </header>
+
+            <main class="app-main">
+                <div class="card" id="step-category">
+                    <h2>What can I fix for you today?</h2>
+                    <div class="category-grid">
+                        <button class="cat-btn" onclick="selectCategory('📱 Phones')">
+                            <span class="icon">📱</span>
+                            <span class="label">Smartphones</span>
+                            <span class="desc">iPhone & Samsung Repairs</span>
+                        </button>
+                        <button class="cat-btn" onclick="selectCategory('🎮 Consoles')">
+                            <span class="icon">🎮</span>
+                            <span class="label">Gaming Consoles</span>
+                            <span class="desc">PS5, Xbox, Switch</span>
+                        </button>
+                        <button class="cat-btn" onclick="selectCategory('🚴 Bikes')">
+                            <span class="icon">🚴</span>
+                            <span class="label">Bicycles</span>
+                            <span class="desc">Gears, Brakes, Servicing</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card hidden" id="step-brand">
+                    <h2>Select your Brand</h2>
+                    <p class="selected-info" id="selected-category"></p>
+                    <div class="brand-list" id="brand-container"></div>
+                    <button class="back-btn" onclick="goBack('category')">
+                        ⬅️ Go Back
+                    </button>
+                </div>
+
+                <div class="card hidden" id="step-model">
+                    <h2>Select your exact Model</h2>
+                    <p class="selected-info" id="selected-brand"></p>
+                    <div class="model-list" id="model-container"></div>
+                    <button class="back-btn" onclick="goBack('brand')">
+                        ⬅️ Change Brand
+                    </button>
+                </div>
+
+                <div class="card hidden" id="step-repair">
+                    <h2>What needs fixing?</h2>
+                    <p class="selected-info" id="selected-model"></p>
+                    <div class="fault-list" id="repair-container"></div>
+                    <button class="back-btn" onclick="handleRepairBackNavigation()">
+                        ⬅️ Go Back
+                    </button>
+                </div>
+
+                <div class="card hidden" id="step-result">
+                    <div id="result-content"></div>
+                    <div class="action-buttons">
+                        <button class="book-btn" onclick="contactMe()">
+                            📩 Message Me / Book Now
+                        </button>
+                        <a href="tel:07392277182" class="phone-btn">
+                            📞 Call: 07392 277182
+                        </a>
+                        <a href="https://wa.me/447392277182" class="whatsapp-btn" target="_blank">
+                            💬 WhatsApp Me
+                        </a>
+                        <button class="back-btn" onclick="goBack('repair')">
+                            ⬅️ Check Another Repair
+                        </button>
+                    </div>
+                </div>
+            </main>
+
+            <footer>
+                <p>✅ 3 Month Warranty on all repairs</p>
+                <p class="phone-footer">📞 Tel: 07392 277182</p>
+                <p class="copyright">© The Repair Dan - Bridgend</p>
+            </footer>
+        </div>
+    </body>
+</html>
