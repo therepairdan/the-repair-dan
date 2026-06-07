@@ -320,3 +320,102 @@ footer p {
     font-size: 11px;
     margin-top: 12px;
 }
+/* --- BOOKING FORM INJECTED STYLES --- */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+    text-align: left;
+}
+
+.form-group label {
+    font-size: 13px;
+    color: #94A3B8;
+    font-weight: 500;
+    padding-left: 2px;
+}
+
+.form-group input, 
+.form-group select, 
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: white;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.form-group input:focus, 
+.form-group select:focus, 
+.form-group textarea:focus {
+    outline: none;
+    border-color: #0EA5E9;
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+}
+
+.form-row {
+    display: flex;
+    gap: 12px;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
+/* Specific buttons inside form layouts */
+.submit-booking-btn {
+    background: linear-gradient(90deg, #10B981 0%, #059669 100%);
+    color: white;
+    margin-top: 10px;
+    font-weight: 700;
+}
+
+.submit-booking-btn:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.msg-btn {
+    background: rgba(51, 65, 85, 0.5);
+    color: #F1F5F9;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.msg-btn:hover {
+    background: rgba(71, 85, 105, 0.6);
+}
+
+.home-btn {
+    background: #334155;
+    color: white;
+}
+
+.home-btn:hover {
+    background: #475569;
+}
+
+/* Success Card Decorators */
+.success-icon {
+    font-size: 54px;
+    margin-bottom: 12px;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+.success-box p {
+    margin-bottom: 6px;
+    font-size: 14px;
+    color: #E2E8F0;
+}
+
+.success-box p strong {
+    color: #38BDF8;
+}
