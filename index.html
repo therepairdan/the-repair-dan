@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en)
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="title" content="The Repair Dan - Phone, Console & Bike Repair Bridgend" />
+        <meta
+            name="description"
+            content="Mobile phone repair, gaming console repair, and bicycle repair in Bridgend. Same-day service on in-stock parts, fixed prices, no hidden fees. Call 07392 277182."
+        />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://therepardan.replit.dev/" />
+        <title>The Repair Dan | Bridgend</title>
+        <link rel="stylesheet" href="style.css" />
+        <script src="script.js" type="text/javascript" defer></script>
+    </head>
+    <body>
+        <div class="app-container">
+            <header class="app-header">
+                <div class="logo-area">
+                    <div class="spinning-gear">⚙</div>
+                    <img
+                        src="/logo.png"
+                        alt="The Repair Dan logo"
+                        class="site-logo"
+                    />
+                    <p class="location">
+                        📍 Your Local Bridgend Repair Specialist
+                    </p>
+                    <p class="phone-header">📞 07392 277182</p>
+                </div>
+                <div class="slogan-box">
+                    <p class="slogan">
+                        🛠️ Same‑day service (on in-stock parts) | ✅ Fixed prices – no hidden fees | 🛡️ 3-Month Warranty
+                    </p>
+                </div>
+            </header>
+
+            <main class="app-main">
+                <div class="card" id="step-category">
+                    <h2>What can I fix for you today?</h2>
+                    <div class="category-grid">
+                        <button class="cat-btn" onclick="selectCategory('📱 Phones')">
+                            <span class="icon">📱</span>
+                            <span class="label">Smartphones</span>
+                            <span class="desc">iPhone & Samsung Repairs</span>
+                        </button>
+                        <button class="cat-btn" onclick="selectCategory('🎮 Consoles')">
+                            <span class="icon">🎮</span>
+                            <span class="label">Gaming Consoles</span>
+                            <span class="desc">PS5, Xbox, Switch</span>
+                        </button>
+                        <button class="cat-btn" onclick="selectCategory('🚴 Bikes')">
+                            <span class="icon">🚴</span>
+                            <span class="label">Bicycles</span>
+                            <span class="desc">Gears, Brakes, Servicing</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card hidden" id="step-brand">
+                    <h2>Select your Brand</h2>
+                    <p class="selected-info" id="selected-category"></p>
+                    <div class="brand-list" id="brand-container"></div>
+                    <button class="back-btn" onclick="goBack('category')">
+                        ⬅️ Go Back
+                    </button>
+                </div>
+
+                <div class="card hidden" id="step-model">
+                    <h2>Select your exact Model</h2>
+                    <p class="selected-info" id="selected-brand"></p>
+                    <div class="model-list" id="model-container"></div>
+                    <button class="back-btn" onclick="goBack('brand')">
+                        ⬅️ Change Brand
+                    </button>
+                </div>
+
+                <div class="card hidden" id="step-repair">
+                    <h2>What needs fixing?</h2>
+                    <p class="selected-info" id="selected-model"></p>
+                    <div class="fault-list" id="repair-container"></div>
+                    <button class="back-btn" onclick="handleRepairBackNavigation()">
+                        ⬅️ Go Back
+                    </button>
+                </div>
+
+                <div class="card hidden" id="step-result">
+                    <div id="result-content"></div>
+                    <div class="action-buttons">
+                        <button class="book-btn" onclick="goToBooking()">
+                            📅 Secure a Repair Slot
+                        </button>
+                        <button class="msg-btn" onclick="contactMe()">
+                            📩 Ask a Quick Question
+                        </button>
+                        <a href="tel:07392277182" class="phone-btn">
+                            📞 Call: 07392 277182
+                        </a>
+                        <button class="back-btn" onclick="goBack('repair')">
+                            ⬅️ Check Another Repair
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card hidden" id="step-booking">
+                    <h2>Request Your Slot</h2>
+                    <p class="selected-info" id="booking-summary-banner"></p>
+                    
+                    <form id="repair-booking-form" onsubmit="handleFormSubmission(event)">
+                        <div class="form-group">
+                            <label for="cust-name">Your Full Name *</label>
+                            <input type="text" id="cust-name" required placeholder="e.g. John Doe">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="cust-phone">Phone Number *</label>
+                            <input type="tel" id="cust-phone" required placeholder="e.g. 07123 456789">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="book-date">Preferred Date *</label>
+                                <input type="date" id="book-date" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="book-time">Preferred Time Slot *</label>
+                                <select id="book-time" required>
+                                    <option value="" disabled selected>Select a time...</option>
+                                    <option value="Morning (9am - 12pm)">Morning (9am - 12pm)</option>
+                                    <option value="Afternoon (12pm - 4pm)">Afternoon (12pm - 4pm)</option>
+                                    <option value="Evening (4pm - 6pm)">Evening (4pm - 6pm)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cust-notes">Additional Details / Notes</label>
+                            <textarea id="cust-notes" rows="3" placeholder="Any specific issues or questions about your device?"></textarea>
+                        </div>
+
+                        <button type="submit" class="submit-booking-btn">
+                            🚀 Confirm Booking Request
+                        </button>
+                    </form>
+
+                    <button class="back-btn" style="margin-top: 15px;" onclick="goBack('result')">
+                        ⬅️ Back to Quote
+                    </button>
+                </div>
+
+                <div class="card hidden" id="step-success">
+                    <div style="text-align: center; padding: 10px 0;">
+                        <div class="success-icon">🎉</div>
+                        <h2>Booking Request Received!</h2>
+                        <div class="success-box" id="success-message-content"></div>
+                        <p style="color: #94A3B8; font-size: 14px; margin-top: 20px; line-height: 1.5;">
+                            I've logged your request and will drop you a text or call within the next hour to confirm your slot!
+                        </p>
+                        <button class="home-btn" style="margin-top: 25px;" onclick="resetWizard()">
+                            🔄 Start Fresh / Fix Something Else
+                        </button>
+                    </div>
+                </div>
+            </main>
+
+            <footer>
+                <p>✅ 3 Month Warranty on all repairs</p>
+                <p class="phone-footer">📞 Tel: 07392 277182</p>
+                <p class="copyright">© The Repair Dan - Bridgend</p>
+            </footer>
+        </div>
+    </body>
+</html>
