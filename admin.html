@@ -1,0 +1,809 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel - The Repair Dan</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        h2 {
+            color: #764ba2;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #333;
+            font-size: 14px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .btn-danger {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #ee5a5a;
+        }
+
+        .btn-success {
+            background: #10B981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        .item-list {
+            background: #f9f9f9;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .item {
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 3px solid #667eea;
+        }
+
+        .item:last-child {
+            margin-bottom: 0;
+        }
+
+        .item-info {
+            flex: 1;
+        }
+
+        .item-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .item-detail {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+            line-height: 1.5;
+        }
+
+        .coming-soon {
+            display: inline-block;
+            background: #fbbf24;
+            color: #78350f;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 8px;
+            margin-left: 10px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            .item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .item-actions {
+                width: 100%;
+                margin-top: 10px;
+                margin-left: 0;
+            }
+        }
+
+        .alert {
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .export-box {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px dashed #ddd;
+        }
+
+        textarea.json-export {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: #999;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Modal Overlay Styling for Edit window */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚙️ The Repair Dan - Admin Panel</h1>
+        <p class="subtitle">Manage all repair services, pricing, and availability</p>
+
+        <div id="alerts"></div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('phones')">📱 Phones</button>
+            <button class="tab" onclick="switchTab('consoles')">🎮 Consoles</button>
+            <button class="tab" onclick="switchTab('bikes')">🚴 Bikes</button>
+            <button class="tab" onclick="switchTab('backup')">💾 Backup</button>
+        </div>
+
+        <div id="phones" class="tab-content active">
+            <div class="section">
+                <h2>📱 iPhone Models & Repairs (Itemized)</h2>
+                <p style="margin-bottom: 15px; color: #666; font-size: 14px;">Every phone model controls its own custom component repair tiers.</p>
+                <div class="item-list" id="iphoneList"></div>
+            </div>
+
+            <div class="section">
+                <h2>📱 Samsung Models & Repairs (Itemized)</h2>
+                <div class="item-list" id="samsungList"></div>
+            </div>
+
+            <div class="section">
+                <h2>➕ Add Custom Phone Model</h2>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Brand</label>
+                        <select id="customPhoneBrand">
+                            <option value="iPhone">iPhone</option>
+                            <option value="Samsung">Samsung</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Model Name</label>
+                        <input type="text" id="customPhoneModel" placeholder="e.g., Galaxy S25 Plus">
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="addCustomPhoneModel()">+ Add Model</button>
+            </div>
+        </div>
+
+        <div id="consoles" class="tab-content">
+            <div class="section">
+                <h2>🎮 Console Repairs</h2>
+                <h3 style="margin-top: 20px; margin-bottom: 10px; color: #764ba2; font-size: 16px;">PlayStation 5</h3>
+                <div class="item-list" id="ps5List"></div>
+                <h3 style="margin-top: 20px; margin-bottom: 10px; color: #764ba2; font-size: 16px;">Xbox Series X/S</h3>
+                <div class="item-list" id="xboxList"></div>
+                <h3 style="margin-top: 20px; margin-bottom: 10px; color: #764ba2; font-size: 16px;">Nintendo Switch</h3>
+                <div class="item-list" id="switchList"></div>
+            </div>
+        </div>
+
+        <div id="bikes" class="tab-content">
+            <div class="section">
+                <h2>🚴 Bicycle Repairs</h2>
+                <h3 style="margin-top: 20px; margin-bottom: 10px; color: #764ba2; font-size: 16px;">Tyres & Wheels</h3>
+                <div class="item-list" id="bikeWheelsLst"></div>
+                <h3 style="margin-top: 20px; margin-bottom: 10px; color: #764ba2; font-size: 16px;">Brakes</h3>
+                <div class="item-list" id="bikeBrakesLst"></div>
+                <h3 style="margin-top: 20px; margin-bottom: 10px; color: #764ba2; font-size: 16px;">Drivetrain</h3>
+                <div class="item-list" id="bikeDrivetrainLst"></div>
+                <h3 style="margin-top: 20px; margin-bottom: 10px; color: #764ba2; font-size: 16px;">Services</h3>
+                <div class="item-list" id="bikeServicesLst"></div>
+            </div>
+        </div>
+
+        <div id="backup" class="tab-content">
+            <div class="section">
+                <h2>💾 Backup & Restore</h2>
+                <div class="button-group">
+                    <button class="btn-success" onclick="exportData()">📥 Download Backup</button>
+                    <button class="btn-secondary" onclick="document.getElementById('importFile').click()">📤 Upload Backup</button>
+                    <button class="btn-danger" onclick="resetAllData()">🔄 Reset to Defaults</button>
+                </div>
+                <input type="file" id="importFile" accept=".json" style="display:none;" onchange="importData(event)">
+                <div class="export-box" style="margin-top: 20px;">
+                    <label>Current Data (JSON):</label>
+                    <textarea class="json-export" id="dataPreview" readonly></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle">Edit Model</h2>
+            <input type="hidden" id="editBrand">
+            <input type="hidden" id="editIdx">
+            
+            <div class="form-group">
+                <label>Battery Replacement Price (£)</label>
+                <input type="number" id="editBattery">
+            </div>
+            <div class="form-group">
+                <label>Screen Replacement Price (£)</label>
+                <input type="number" id="editScreen">
+            </div>
+            <div class="form-group">
+                <label>Back Glass Repair Price (£)</label>
+                <input type="number" id="editBackGlass">
+            </div>
+            <div class="form-group">
+                <label>Camera Repair Price (£)</label>
+                <input type="number" id="editCamera">
+            </div>
+            <div class="form-group">
+                <label>Water Damage Treatment (£)</label>
+                <input type="number" id="editWaterDamage">
+            </div>
+            <div class="form-group">
+                <label>Deep Clean (£)</label>
+                <input type="number" id="editDeepClean">
+            </div>
+
+            <div class="button-group" style="margin-top: 20px;">
+                <button class="btn-success" onclick="saveModalChanges()">Save Changes</button>
+                <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'repairDanDataComplete';
+
+        // Re-declaring detailed model parameters matching script.js base configuration
+        const DEFAULT_DATA = {
+            iPhone: {
+                models: [
+                    { name: "iPhone 8", battery: 40, screen: 60, backGlass: 35, camera: 35, waterDamage: 30, deepClean: 12 },
+                    { name: "iPhone 8 Plus", battery: 40, screen: 60, backGlass: 35, camera: 35, waterDamage: 30, deepClean: 12 },
+                    { name: "iPhone X", battery: 45, screen: 85, backGlass: 40, camera: 40, waterDamage: 30, deepClean: 12 },
+                    { name: "iPhone XS", battery: 45, screen: 85, backGlass: 40, camera: 40, waterDamage: 30, deepClean: 12 },
+                    { name: "iPhone XS Max", battery: 45, screen: 95, backGlass: 45, camera: 45, waterDamage: 30, deepClean: 12 },
+                    { name: "iPhone XR", battery: 40, screen: 75, backGlass: 40, camera: 40, waterDamage: 30, deepClean: 12 },
+                    { name: "iPhone 11", battery: 45, screen: 75, backGlass: 40, camera: 40, waterDamage: 30, deepClean: 12 },
+                    { name: "iPhone 11 Pro", battery: 50, screen: 90, backGlass: 45, camera: 45, waterDamage: 30, deepClean: 12 },
+                    { name: "iPhone 11 Pro Max", battery: 50, screen: 100, backGlass: 50, camera: 50, waterDamage: 30, deepClean: 12 },
+                    { name: "iPhone 12", battery: 50, screen: 85, backGlass: 45, camera: 45, waterDamage: 30, deepClean: 12 },
+                    { name: "iPhone 12 Mini", battery: 50, screen: 85, backGlass: 45, camera: 45, waterDamage: 30, deepClean: 12 },
+                    { name: "iPhone 12 Pro", battery: 55, screen: 100, backGlass: 50, camera: 50, waterDamage: 30, deepClean: 12 },
+                    { name: "iPhone 12 Pro Max", battery: 55, screen: 110, backGlass: 55, camera: 55, waterDamage: 30, deepClean: 12 },
+                    { name: "iPhone 13", battery: 55, screen: 95, backGlass: 50, camera: 55, waterDamage: 30, deepClean: 12 },
+                    { name: "iPhone 13 Mini", battery: 55, screen: 95, backGlass: 50, camera: 50, waterDamage: 30, deepClean: 12 },
+                    { name: "iPhone 13 Pro", battery: 60, screen: 105, backGlass: 55, camera: 60, waterDamage: 30, deepClean: 12 },
+                    { name: "iPhone 13 Pro Max", battery: 60, screen: 115, backGlass: 60, camera: 65, waterDamage: 30, deepClean: 12 },
+                    { name: "iPhone SE (1st Gen)", battery: 35, screen: 50, backGlass: 30, camera: 30, waterDamage: 30, deepClean: 12 },
+                    { name: "iPhone SE (2nd Gen)", battery: 40, screen: 60, backGlass: 35, camera: 35, waterDamage: 30, deepClean: 12 },
+                    { name: "iPhone SE (3rd Gen)", battery: 45, screen: 65, backGlass: 35, camera: 35, waterDamage: 30, deepClean: 12 },
+                    { name: "iPhone 14", battery: 60, screen: 100, backGlass: 55, camera: 60, waterDamage: 30, deepClean: 12 },
+                    { name: "iPhone 14 Plus", battery: 60, screen: 105, backGlass: 55, camera: 60, waterDamage: 30, deepClean: 12 },
+                    { name: "iPhone 14 Pro", battery: 65, screen: 120, backGlass: 65, camera: 75, waterDamage: 30, deepClean: 12 },
+                    { name: "iPhone 14 Pro Max", battery: 65, screen: 130, backGlass: 70, camera: 80, waterDamage: 30, deepClean: 12 },
+                    { name: "iPhone 15", battery: 70, screen: 115, backGlass: 60, camera: 70, waterDamage: 30, deepClean: 12 },
+                    { name: "iPhone 15 Plus", battery: 70, screen: 120, backGlass: 65, camera: 70, waterDamage: 30, deepClean: 12 },
+                    { name: "iPhone 15 Pro", battery: 75, screen: 135, backGlass: 75, camera: 85, waterDamage: 30, deepClean: 12 },
+                    { name: "iPhone 15 Pro Max", battery: 75, screen: 145, backGlass: 80, camera: 95, waterDamage: 30, deepClean: 12 },
+                    { name: "iPhone 16", battery: 75, screen: 120, backGlass: 65, camera: 75, waterDamage: 30, deepClean: 12 },
+                    { name: "iPhone 16 Plus", battery: 75, screen: 125, backGlass: 70, camera: 75, waterDamage: 30, deepClean: 12 },
+                    { name: "iPhone 16 Pro", battery: 80, screen: 140, backGlass: 80, camera: 90, waterDamage: 30, deepClean: 12 },
+                    { name: "iPhone 16 Pro Max", battery: 80, screen: 150, backGlass: 85, camera: 100, waterDamage: 30, deepClean: 12 }
+                ]
+            },
+            Samsung: {
+                models: [
+                    { name: "Galaxy A12", battery: 35, screen: 55, backGlass: 25, camera: 35, waterDamage: 30, deepClean: 12 },
+                    { name: "Galaxy A13", battery: 35, screen: 55, backGlass: 25, camera: 35, waterDamage: 30, deepClean: 12 },
+                    { name: "Galaxy A50", battery: 45, screen: 80, backGlass: 30, camera: 40, waterDamage: 30, deepClean: 12 },
+                    { name: "Galaxy A51", battery: 45, screen: 80, backGlass: 30, camera: 40, waterDamage: 30, deepClean: 12 },
+                    { name: "Galaxy A52", battery: 45, screen: 80, backGlass: 30, camera: 40, waterDamage: 30, deepClean: 12 },
+                    { name: "Galaxy A53", battery: 50, screen: 80, backGlass: 35, camera: 40, waterDamage: 30, deepClean: 12 },
+                    { name: "Galaxy A54", battery: 50, screen: 105, backGlass: 35, camera: 45, waterDamage: 30, deepClean: 12 },
+                    { name: "Galaxy A55", battery: 55, screen: 105, backGlass: 40, camera: 45, waterDamage: 30, deepClean: 12 },
+                    { name: "Galaxy S20", battery: 50, screen: 90, backGlass: 35, camera: 50, waterDamage: 30, deepClean: 12 },
+                    { name: "Galaxy S20+", battery: 50, screen: 100, backGlass: 35, camera: 50, waterDamage: 30, deepClean: 12 },
+                    { name: "Galaxy S20 Ultra", battery: 55, screen: 110, backGlass: 40, camera: 60, waterDamage: 30, deepClean: 12 },
+                    { name: "Galaxy S21", battery: 50, screen: 90, backGlass: 35, camera: 50, waterDamage: 30, deepClean: 12 },
+                    { name: "Galaxy S21+", battery: 50, screen: 100, backGlass: 35, camera: 55, waterDamage: 30, deepClean: 12 },
+                    { name: "Galaxy S21 Ultra", battery: 55, screen: 110, backGlass: 40, camera: 65, waterDamage: 30, deepClean: 12 },
+                    { name: "Galaxy S22", battery: 50, screen: 95, backGlass: 35, camera: 55, waterDamage: 30, deepClean: 12 },
+                    { name: "Galaxy S22+", battery: 50, screen: 105, backGlass: 40, camera: 60, waterDamage: 30, deepClean: 12 },
+                    { name: "Galaxy S22 Ultra", battery: 60, screen: 120, backGlass: 45, camera: 70, waterDamage: 30, deepClean: 12 },
+                    { name: "Galaxy S23", battery: 55, screen: 100, backGlass: 40, camera: 60, waterDamage: 30, deepClean: 12 },
+                    { name: "Galaxy S23+", battery: 55, screen: 110, backGlass: 40, camera: 65, waterDamage: 30, deepClean: 12 },
+                    { name: "Galaxy S23 Ultra", battery: 65, screen: 125, backGlass: 45, camera: 75, waterDamage: 30, deepClean: 12 },
+                    { name: "Galaxy S24", battery: 60, screen: 105, backGlass: 45, camera: 65, waterDamage: 30, deepClean: 12 },
+                    { name: "Galaxy S24+", battery: 60, screen: 115, backGlass: 45, camera: 70, waterDamage: 30, deepClean: 12 },
+                    { name: "Galaxy S24 Ultra", battery: 70, screen: 135, backGlass: 50, camera: 80, waterDamage: 30, deepClean: 12 },
+                    { name: "Galaxy S25", battery: 65, screen: 115, backGlass: 45, camera: 70, waterDamage: 30, deepClean: 12 },
+                    { name: "Galaxy S25+", battery: 65, screen: 125, backGlass: 45, camera: 75, waterDamage: 30, deepClean: 12 },
+                    { name: "Galaxy S25 Ultra", battery: 75, screen: 145, backGlass: 55, camera: 85, waterDamage: 30, deepClean: 12 }
+                ]
+            },
+            Console: {
+                PS5: [
+                    { name: "Stick Drift (Controller)", recommended: 35, comingSoon: false },
+                    { name: "Button Replacement", recommended: 30, comingSoon: false },
+                    { name: "Fan Cleaning", recommended: 60, comingSoon: false },
+                    { name: "Deep Clean", recommended: 35, comingSoon: false },
+                    { name: "HDMI Port Repair", recommended: 70, comingSoon: true },
+                    { name: "Power Supply Issue", recommended: 70, comingSoon: true }
+                ],
+                Xbox: [
+                    { name: "Stick Drift (Controller)", recommended: 30, comingSoon: false },
+                    { name: "Button Replacement", recommended: 30, comingSoon: false },
+                    { name: "Fan Cleaning", recommended: 55, comingSoon: false },
+                    { name: "Deep Clean", recommended: 30, comingSoon: false },
+                    { name: "HDMI Port Repair", recommended: 65, comingSoon: true },
+                    { name: "Power Supply", recommended: 65, comingSoon: true }
+                ],
+                Switch: [
+                    { name: "Joy-Con Stick Drift", recommended: 30, comingSoon: false },
+                    { name: "Joy-Con Button Fix", recommended: 30, comingSoon: false },
+                    { name: "Battery Replacement", recommended: 40, comingSoon: false },
+                    { name: "Deep Clean", recommended: 25, comingSoon: false },
+                    { name: "Console Charging Port", recommended: 50, comingSoon: true }
+                ]
+            },
+            Bicycle: {
+                wheels: [
+                    { name: "Puncture Repair", recommended: 12 },
+                    { name: "New Tyre Fitting", recommended: 15 },
+                    { name: "Wheel True", recommended: 30 },
+                    { name: "Spoke Replacement", recommended: 25 }
+                ],
+                brakes: [
+                    { name: "Brake Adjustment", recommended: 15 },
+                    { name: "Brake Pad Replacement", recommended: 18 },
+                    { name: "Brake Cable Replacement", recommended: 20 },
+                    { name: "Hydraulic Brake Bleed", recommended: 35 }
+                ],
+                drivetrain: [
+                    { name: "Chain Replacement", recommended: 18 },
+                    { name: "Derailleur Adjustment", recommended: 18 },
+                    { name: "Gear Cable Replacement", recommended: 20 },
+                    { name: "Drivetrain Deep Clean", recommended: 35 }
+                ],
+                services: [
+                    { name: "Safety Check", recommended: 15 },
+                    { name: "Mini Service", recommended: 50 },
+                    { name: "Standard Service", recommended: 80 },
+                    { name: "Full Overhaul", recommended: 130 }
+                ]
+            }
+        };
+
+        function getData() {
+            try {
+                return JSON.parse(localStorage.getItem(STORAGE_KEY)) || DEFAULT_DATA;
+            } catch (e) {
+                return DEFAULT_DATA;
+            }
+        }
+
+        function saveData(data) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            updateUI();
+            showAlert('✅ Data saved!', 'success');
+        }
+
+        function showAlert(msg, type = 'info') {
+            const alerts = document.getElementById('alerts');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = msg;
+            alerts.appendChild(alert);
+            setTimeout(() => alert.remove(), 3000);
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function updateUI() {
+            const data = getData();
+            renderPhoneList('iPhone', 'iphoneList', data);
+            renderPhoneList('Samsung', 'samsungList', data);
+            renderConsolesList(data);
+            renderBikesList(data);
+            updateDataPreview();
+        }
+
+        function renderPhoneList(brand, elementId, data) {
+            const list = document.getElementById(elementId);
+            list.innerHTML = '';
+            if(!data[brand] || !data[brand].models) return;
+
+            data[brand].models.forEach((model, idx) => {
+                const item = document.createElement('div');
+                item.className = 'item';
+                item.innerHTML = `
+                    <div class="item-info">
+                        <div class="item-name">${model.name}</div>
+                        <div class="item-detail">
+                            Battery: £${model.battery} | Screen: £${model.screen} | Glass: £${model.backGlass || 45}<br>
+                            Camera: £${model.camera || 40} | Water Treatment: £${model.waterDamage || 30} | Clean: £${model.deepClean || 12}
+                        </div>
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn-success btn-small" onclick="openEditModal('${brand}', ${idx})">Edit Prices</button>
+                        <button class="btn-danger btn-small" onclick="deletePhoneModel('${brand}', ${idx})">Delete</button>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function openEditModal(brand, idx) {
+            const data = getData();
+            const model = data[brand].models[idx];
+            
+            document.getElementById('modalTitle').textContent = `Edit Pricing for ${model.name}`;
+            document.getElementById('editBrand').value = brand;
+            document.getElementById('editIdx').value = idx;
+
+            document.getElementById('editBattery').value = model.battery || 0;
+            document.getElementById('editScreen').value = model.screen || 0;
+            document.getElementById('editBackGlass').value = model.backGlass || 45;
+            document.getElementById('editCamera').value = model.camera || 40;
+            document.getElementById('editWaterDamage').value = model.waterDamage || 30;
+            document.getElementById('editDeepClean').value = model.deepClean || 12;
+
+            document.getElementById('editModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('editModal').classList.remove('active');
+        }
+
+        function saveModalChanges() {
+            const brand = document.getElementById('editBrand').value;
+            const idx = parseInt(document.getElementById('editIdx').value);
+            const data = getData();
+
+            data[brand].models[idx].battery = parseInt(document.getElementById('editBattery').value) || 0;
+            data[brand].models[idx].screen = parseInt(document.getElementById('editScreen').value) || 0;
+            data[brand].models[idx].backGlass = parseInt(document.getElementById('editBackGlass').value) || 0;
+            data[brand].models[idx].camera = parseInt(document.getElementById('editCamera').value) || 0;
+            data[brand].models[idx].waterDamage = parseInt(document.getElementById('editWaterDamage').value) || 0;
+            data[brand].models[idx].deepClean = parseInt(document.getElementById('editDeepClean').value) || 0;
+
+            saveData(data);
+            closeModal();
+        }
+
+        function deletePhoneModel(brand, idx) {
+            if (!confirm(`Delete this ${brand} model completely?`)) return;
+            const data = getData();
+            data[brand].models.splice(idx, 1);
+            saveData(data);
+        }
+
+        function addCustomPhoneModel() {
+            const brand = document.getElementById('customPhoneBrand').value;
+            const modelName = document.getElementById('customPhoneModel').value.trim();
+
+            if (!modelName) {
+                showAlert('⚠️ Enter a valid model name', 'info');
+                return;
+            }
+
+            const data = getData();
+            data[brand].models.push({
+                name: modelName,
+                battery: 55,
+                screen: 95,
+                backGlass: 45,
+                camera: 40,
+                waterDamage: 30,
+                deepClean: 12
+            });
+
+            saveData(data);
+            document.getElementById('customPhoneModel').value = '';
+            showAlert(`✅ Added ${modelName} to ${brand}!`, 'success');
+        }
+
+        function renderConsolesList(data) {
+            const ps5 = document.getElementById('ps5List');
+            const xbox = document.getElementById('xboxList');
+            const switchList = document.getElementById('switchList');
+
+            [
+                { list: ps5, consoles: data.Console.PS5 },
+                { list: xbox, consoles: data.Console.Xbox },
+                { list: switchList, consoles: data.Console.Switch }
+            ].forEach(({ list, consoles }) => {
+                list.innerHTML = '';
+                consoles.forEach((repair) => {
+                    const item = document.createElement('div');
+                    item.className = 'item';
+                    const comingSoonBadge = repair.comingSoon ? '<span class="coming-soon">Coming Soon</span>' : '';
+                    item.innerHTML = `
+                        <div class="item-info">
+                            <div class="item-name">${repair.name}${comingSoonBadge}</div>
+                            <div class="item-detail">Price: £${repair.recommended}</div>
+                        </div>
+                    `;
+                    list.appendChild(item);
+                });
+            });
+        }
+
+        function renderBikesList(data) {
+            const sections = [
+                { id: 'bikeWheelsLst', repairs: data.Bicycle.wheels },
+                { id: 'bikeBrakesLst', repairs: data.Bicycle.brakes },
+                { id: 'bikeDrivetrainLst', repairs: data.Bicycle.drivetrain },
+                { id: 'bikeServicesLst', repairs: data.Bicycle.services }
+            ];
+
+            sections.forEach(({ id, repairs }) => {
+                const list = document.getElementById(id);
+                list.innerHTML = '';
+                repairs.forEach((repair) => {
+                    const item = document.createElement('div');
+                    item.className = 'item';
+                    item.innerHTML = `
+                        <div class="item-info">
+                            <div class="item-name">${repair.name}</div>
+                            <div class="item-detail">Price: £${repair.recommended}</div>
+                        </div>
+                    `;
+                    list.appendChild(item);
+                });
+            });
+        }
+
+        function exportData() {
+            const data = getData();
+            const json = JSON.stringify(data, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'repair-dan-complete-backup.json';
+            a.click();
+            showAlert('✅ Backup downloaded!', 'success');
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+                    updateUI();
+                    showAlert('✅ Data restored!', 'success');
+                } catch (err) {
+                    showAlert('❌ Invalid backup file', 'info');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function resetAllData() {
+            if (!confirm('🚨 Reset ALL data to defaults? This cannot be undone!')) return;
+            localStorage.removeItem(STORAGE_KEY);
+            updateUI();
+            showAlert('✅ Data reset to defaults', 'success');
+        }
+
+        function updateDataPreview() {
+            const data = getData();
+            document.getElementById('dataPreview').value = JSON.stringify(data, null, 2);
+        }
+
+        window.addEventListener('load', () => {
+            updateUI();
+        });
+    </script>
+</body>
+</html>
