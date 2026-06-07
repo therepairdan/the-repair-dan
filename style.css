@@ -1,0 +1,322 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+}
+
+html {
+    overflow-x: hidden;
+    height: 100%;
+}
+
+body {
+    overflow-x: hidden;
+    background-color: #0F172A;
+    background-image: url('/bg.png');
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    min-height: 100%;
+    padding: 20px 15px;
+    color: #F8FAFC;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 18, 35, 0.72);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.app-container {
+    position: relative;
+    z-index: 1;
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+/* --- HEADER --- */
+.app-header {
+    text-align: center;
+    margin-bottom: 25px;
+    padding: 20px 15px;
+    background: rgba(30, 41, 59, 0.08);
+    border-radius: 12px;
+    border-bottom: 3px solid #0EA5E9;
+}
+
+.logo-area {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 12px;
+    width: 100%;
+}
+
+/* Fixed spinning gear scaling & alignment */
+.spinning-gear {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 80px; /* Reduced to look perfectly proportional behind your image logo */
+    color: rgba(14, 165, 233, 0.15);
+    z-index: -1;
+    animation: spin 16s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.site-logo {
+    max-width: 180px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+.location {
+    font-size: 14px;
+    color: #94A3B8;
+    margin-top: 10px;
+    font-weight: 500;
+}
+
+.phone-header {
+    font-size: 18px;
+    color: #38BDF8;
+    font-weight: bold;
+    margin-top: 4px;
+}
+
+.slogan-box {
+    margin-top: 15px;
+    background: rgba(15, 23, 42, 0.6);
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+
+.slogan {
+    font-size: 11px;
+    color: #E2E8F0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    line-height: 1.5;
+}
+
+/* --- CARDS & WIZARD PANELS --- */
+.card {
+    background: rgba(30, 41, 59, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    margin-bottom: 20px;
+    transition: opacity 0.25s ease-in-out;
+}
+
+.card h2 {
+    font-size: 20px;
+    text-align: center;
+    margin-bottom: 15px;
+    color: #F8FAFC;
+    font-weight: 600;
+}
+
+.selected-info {
+    text-align: center;
+    font-size: 13px;
+    color: #38BDF8;
+    background: rgba(56, 189, 248, 0.1);
+    padding: 6px 12px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-weight: 600;
+    display: inline-block;
+    width: 100%;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* --- BUTTON LAYOUT ELEMENTS --- */
+button, .phone-btn, .whatsapp-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    text-align: center;
+}
+
+/* Category grid dashboard cards */
+.category-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.cat-btn {
+    background: linear-gradient(135deg, rgba(51, 65, 85, 0.6) 0%, rgba(30, 41, 59, 0.8) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: white;
+    padding: 18px;
+    flex-direction: column;
+    gap: 4px;
+    height: auto;
+}
+
+.cat-btn:hover {
+    background: linear-gradient(135deg, rgba(71, 85, 105, 0.7) 0%, rgba(51, 65, 85, 0.9) 100%);
+    border-color: #0EA5E9;
+    transform: translateY(-2px);
+}
+
+.cat-btn .icon {
+    font-size: 28px;
+    margin-bottom: 4px;
+}
+
+.cat-btn .label {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.cat-btn .desc {
+    font-size: 12px;
+    color: #94A3B8;
+    font-weight: 400;
+}
+
+/* Brand, Lists and Model Layout Grid Structures */
+.brand-list, .model-list, .fault-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+/* Item Selection Styling */
+.brand-btn, .model-btn, .fault-btn {
+    background: rgba(51, 65, 85, 0.5);
+    color: #F1F5F9;
+    border: 1px solid rgba(255,255,255,0.03);
+    justify-content: flex-start;
+    padding-left: 20px;
+}
+
+.brand-btn:hover, .model-btn:hover, .fault-btn:hover {
+    background: #0EA5E9;
+    color: white;
+    transform: translateX(4px);
+}
+
+/* --- RESULT PANEL PRICING DISPLAY --- */
+.price-tag {
+    font-size: 48px;
+    font-weight: 800;
+    color: #10B981;
+    margin: 15px 0;
+    text-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
+}
+
+.explanation {
+    background: rgba(15, 23, 42, 0.4);
+    padding: 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    color: #CBD5E1;
+    line-height: 1.6;
+    text-align: left;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    margin-bottom: 20px;
+}
+
+/* --- ACTIONS SECTION --- */
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.back-btn {
+    background: rgba(100, 116, 139, 0.25);
+    color: #94A3B8;
+    margin-top: 5px;
+}
+
+.back-btn:hover {
+    background: rgba(100, 116, 139, 0.4);
+    color: #F1F5F9;
+}
+
+.book-btn {
+    background: linear-gradient(90deg, #0EA5E9 0%, #06B6D4 100%);
+    color: white;
+}
+
+.book-btn:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+}
+
+.phone-btn {
+    background: #10B981;
+    color: white;
+}
+
+.phone-btn:hover {
+    background: #0D9668;
+    transform: scale(1.02);
+}
+
+.whatsapp-btn {
+    background: #25D366;
+    color: white;
+}
+
+.whatsapp-btn:hover {
+    background: #20BA56;
+    transform: scale(1.02);
+}
+
+/* --- FOOTER --- */
+footer {
+    text-align: center;
+    margin-top: 30px;
+    padding: 20px;
+    color: #64748B;
+    font-size: 13px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+footer p {
+    margin-bottom: 6px;
+}
+
+.phone-footer {
+    color: #94A3B8;
+    font-weight: 600;
+}
+
+.copyright {
+    font-size: 11px;
+    margin-top: 12px;
+}
