@@ -1,0 +1,598 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel - The Repair Dan</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        h2 {
+            color: #764ba2;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #333;
+            font-size: 14px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .btn-danger {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #ee5a5a;
+        }
+
+        .btn-success {
+            background: #10B981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .item-list {
+            background: #f9f9f9;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .item {
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 3px solid #667eea;
+        }
+
+        .item:last-child {
+            margin-bottom: 0;
+        }
+
+        .item-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .item-actions button {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            .item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .item-actions {
+                width: 100%;
+                margin-top: 10px;
+            }
+        }
+
+        .alert {
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .export-box {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px dashed #ddd;
+        }
+
+        textarea.json-export {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚙️ The Repair Dan - Admin Panel</h1>
+        <p class="subtitle">Manage your repair types, models, and pricing without coding</p>
+
+        <div id="alerts"></div>
+
+        <!-- ADD BRAND -->
+        <div class="section">
+            <h2>📱 Add New Brand</h2>
+            <div class="form-group">
+                <label>Brand Name (e.g., Console, Bicycle, MacBook)</label>
+                <input type="text" id="newBrandName" placeholder="Brand name">
+            </div>
+            <button class="btn-primary" onclick="addBrand()">+ Add Brand</button>
+
+            <div class="item-list" id="brandList"></div>
+        </div>
+
+        <!-- MANAGE REPAIRS FOR BRAND -->
+        <div class="section">
+            <h2>🔧 Add Repair Type</h2>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Select Brand</label>
+                    <select id="brandForRepair" onchange="updateRepairsList()"></select>
+                </div>
+                <div class="form-group">
+                    <label>Repair Type (e.g., Battery, Screen)</label>
+                    <input type="text" id="repairType" placeholder="e.g., Battery Replacement">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Price / Details (can be simple or complex)</label>
+                <input type="text" id="repairPrice" placeholder='e.g., £50 or Official: £100 | Budget: £50'>
+            </div>
+            <div class="form-group">
+                <label>Additional Notes (optional)</label>
+                <textarea id="repairNote" placeholder="e.g., ✅ Includes 3 month warranty"></textarea>
+            </div>
+            <button class="btn-primary" onclick="addRepair()">+ Add Repair</button>
+
+            <div class="item-list" id="repairsList"></div>
+        </div>
+
+        <!-- MANAGE MODELS FOR BRAND -->
+        <div class="section">
+            <h2>📋 Add Device Model</h2>
+            <div class="form-group">
+                <label>Select Brand</label>
+                <select id="brandForModel" onchange="updateModelsList()"></select>
+            </div>
+            <div class="form-group">
+                <label>Model Name (e.g., "iPhone 15", "S24 Ultra")</label>
+                <input type="text" id="modelName" placeholder="e.g., iPhone 15 Pro">
+            </div>
+            <button class="btn-primary" onclick="addModel()">+ Add Model</button>
+
+            <div class="item-list" id="modelsList"></div>
+        </div>
+
+        <!-- BACKUP & RESTORE -->
+        <div class="section">
+            <h2>💾 Backup & Restore</h2>
+            <p style="margin-bottom: 15px; color: #666; font-size: 14px;">
+                Download your data as a JSON file to keep safe, or upload one to restore.
+            </p>
+            <div class="button-group">
+                <button class="btn-success" onclick="exportData()">📥 Download Backup</button>
+                <button class="btn-secondary" onclick="document.getElementById('importFile').click()">📤 Upload Backup</button>
+                <button class="btn-danger" onclick="clearAllData()">🗑️ Clear All Data</button>
+            </div>
+            <input type="file" id="importFile" accept=".json" style="display:none;" onchange="importData(event)">
+
+            <div class="export-box" style="margin-top: 20px;">
+                <label>Current Data (for reference):</label>
+                <textarea class="json-export" id="dataPreview" readonly></textarea>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'repairDanData';
+
+        // Initialize default data if empty
+        function initData() {
+            let data = getData();
+            if (!data || Object.keys(data).length === 0) {
+                data = {
+                    iPhone: {
+                        models: ["8", "X", "11", "12", "13", "14", "15"],
+                        repairs: {
+                            battery: { price: "£40-£100", note: "✅ Fully working" },
+                            screen: { price: "£35-£230", note: "✅ Multiple options available" },
+                            charge: { price: "£40-£50", note: "✅ USB-C on iPhone 15/16" }
+                        }
+                    }
+                };
+                saveData(data);
+            }
+            return data;
+        }
+
+        function getData() {
+            try {
+                return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+            } catch (e) {
+                return {};
+            }
+        }
+
+        function saveData(data) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            updateUI();
+            showAlert('✅ Data saved!', 'success');
+        }
+
+        function updateUI() {
+            const data = getData();
+            updateBrandsList();
+            updateBrandSelects();
+            updateDataPreview();
+        }
+
+        function showAlert(msg, type = 'info') {
+            const alerts = document.getElementById('alerts');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = msg;
+            alerts.appendChild(alert);
+            setTimeout(() => alert.remove(), 3000);
+        }
+
+        function addBrand() {
+            const name = document.getElementById('newBrandName').value.trim();
+            if (!name) {
+                showAlert('⚠️ Please enter a brand name', 'info');
+                return;
+            }
+
+            const data = getData();
+            if (data[name]) {
+                showAlert('⚠️ Brand already exists', 'info');
+                return;
+            }
+
+            data[name] = { models: [], repairs: {} };
+            saveData(data);
+            document.getElementById('newBrandName').value = '';
+            showAlert(`✅ Brand "${name}" added!`, 'success');
+        }
+
+        function deleteBrand(brandName) {
+            if (!confirm(`Delete brand "${brandName}" and all its data?`)) return;
+            const data = getData();
+            delete data[brandName];
+            saveData(data);
+            showAlert(`✅ Brand "${brandName}" deleted`, 'success');
+        }
+
+        function addModel() {
+            const brand = document.getElementById('brandForModel').value;
+            const modelName = document.getElementById('modelName').value.trim();
+
+            if (!brand || !modelName) {
+                showAlert('⚠️ Select brand and enter model name', 'info');
+                return;
+            }
+
+            const data = getData();
+            if (!data[brand].models.includes(modelName)) {
+                data[brand].models.push(modelName);
+                saveData(data);
+                document.getElementById('modelName').value = '';
+                showAlert(`✅ Model "${modelName}" added to ${brand}`, 'success');
+            } else {
+                showAlert('⚠️ Model already exists', 'info');
+            }
+        }
+
+        function deleteModel(brand, model) {
+            if (!confirm(`Delete model "${model}"?`)) return;
+            const data = getData();
+            data[brand].models = data[brand].models.filter(m => m !== model);
+            saveData(data);
+            showAlert(`✅ Model deleted`, 'success');
+        }
+
+        function addRepair() {
+            const brand = document.getElementById('brandForRepair').value;
+            const repairType = document.getElementById('repairType').value.trim().toLowerCase();
+            const repairPrice = document.getElementById('repairPrice').value.trim();
+            const repairNote = document.getElementById('repairNote').value.trim();
+
+            if (!brand || !repairType || !repairPrice) {
+                showAlert('⚠️ Fill in all required fields', 'info');
+                return;
+            }
+
+            const data = getData();
+            data[brand].repairs[repairType] = {
+                price: repairPrice,
+                note: repairNote || ''
+            };
+            saveData(data);
+            document.getElementById('repairType').value = '';
+            document.getElementById('repairPrice').value = '';
+            document.getElementById('repairNote').value = '';
+            showAlert(`✅ Repair type "${repairType}" added to ${brand}`, 'success');
+        }
+
+        function deleteRepair(brand, repairType) {
+            if (!confirm(`Delete repair type "${repairType}"?`)) return;
+            const data = getData();
+            delete data[brand].repairs[repairType];
+            saveData(data);
+            showAlert(`✅ Repair deleted`, 'success');
+        }
+
+        function updateBrandsList() {
+            const data = getData();
+            const list = document.getElementById('brandList');
+            list.innerHTML = '';
+
+            Object.keys(data).forEach(brand => {
+                const item = document.createElement('div');
+                item.className = 'item';
+                item.innerHTML = `
+                    <div>
+                        <div class="item-name">${brand}</div>
+                        <div style="font-size: 12px; color: #999;">
+                            ${data[brand].models.length} models • ${Object.keys(data[brand].repairs).length} repair types
+                        </div>
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn-danger" onclick="deleteBrand('${brand}')">Delete</button>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function updateBrandSelects() {
+            const data = getData();
+            const brands = Object.keys(data);
+
+            [document.getElementById('brandForRepair'), document.getElementById('brandForModel')].forEach(select => {
+                select.innerHTML = '<option value="">-- Select Brand --</option>';
+                brands.forEach(brand => {
+                    const option = document.createElement('option');
+                    option.value = brand;
+                    option.textContent = brand;
+                    select.appendChild(option);
+                });
+            });
+        }
+
+        function updateModelsList() {
+            const brand = document.getElementById('brandForModel').value;
+            const list = document.getElementById('modelsList');
+            list.innerHTML = '';
+
+            if (!brand) return;
+
+            const data = getData();
+            const models = data[brand].models;
+
+            models.forEach(model => {
+                const item = document.createElement('div');
+                item.className = 'item';
+                item.innerHTML = `
+                    <div class="item-name">${model}</div>
+                    <div class="item-actions">
+                        <button class="btn-danger" onclick="deleteModel('${brand}', '${model}')">Delete</button>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function updateRepairsList() {
+            const brand = document.getElementById('brandForRepair').value;
+            const list = document.getElementById('repairsList');
+            list.innerHTML = '';
+
+            if (!brand) return;
+
+            const data = getData();
+            const repairs = data[brand].repairs;
+
+            Object.entries(repairs).forEach(([type, info]) => {
+                const item = document.createElement('div');
+                item.className = 'item';
+                item.innerHTML = `
+                    <div>
+                        <div class="item-name">${type}</div>
+                        <div style="font-size: 12px; color: #666;">
+                            💰 ${info.price}<br>
+                            ${info.note ? `📝 ${info.note}` : ''}
+                        </div>
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn-danger" onclick="deleteRepair('${brand}', '${type}')">Delete</button>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function updateDataPreview() {
+            const data = getData();
+            document.getElementById('dataPreview').value = JSON.stringify(data, null, 2);
+        }
+
+        function exportData() {
+            const data = getData();
+            const json = JSON.stringify(data, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'repair-dan-backup.json';
+            a.click();
+            showAlert('✅ Backup downloaded!', 'success');
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+                    updateUI();
+                    showAlert('✅ Data restored from backup!', 'success');
+                } catch (err) {
+                    showAlert('❌ Invalid backup file', 'info');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function clearAllData() {
+            if (!confirm('🚨 Are you SURE? This will delete everything!')) return;
+            localStorage.removeItem(STORAGE_KEY);
+            initData();
+            showAlert('✅ Data reset to default', 'success');
+        }
+
+        // Initialize on load
+        window.addEventListener('load', () => {
+            initData();
+            updateUI();
+        });
+    </script>
+</body>
+</html>
