@@ -42,7 +42,7 @@ export default async function handler(req, res) {
             },
             body: JSON.stringify({
                 from: 'onboarding@resend.dev', 
-                to: 'YOUR_PERSONAL_EMAIL@GMAIL.COM', // <-- DOUBLE CHECK THIS IS YOUR REAL EMAIL!
+                to: 'therepairdan42@gmail.com', // <-- DOUBLE CHECK THIS IS YOUR REAL EMAIL!
                 subject: `🚨 New Booking: ${customerName}`,
                 html: emailHtml
             })
