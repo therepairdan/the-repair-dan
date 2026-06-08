@@ -417,3 +417,53 @@ function goBack(to) {
 function contactMe() {
     window.open('https://m.me/therepardan', '_blank');
 }
+function handleFormSubmission(event) {
+    event.preventDefault();
+    
+    const name = document.getElementById('cust-name').value.trim();
+    const phone = document.getElementById('cust-phone').value.trim();
+    const date = document.getElementById('book-date').value;
+    const time = document.getElementById('book-time').value;
+    const notes = document.getElementById('cust-notes').value.trim();
+    
+    const bookingData = {
+        customerName: name,
+        customerPhone: phone,
+        deviceModel: currentModel || 'Unknown Device',
+        repairType: currentRepair || 'Unknown Repair',
+        estimatedPrice: currentPrice || '0',
+        requestedDate: date,
+        requestedTime: time,
+        additionalNotes: notes
+    };
+
+    // Fire data straight down into your Vercel api controller link
+    fetch('/api/book', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(bookingData)
+    })
+    .then(response => response.json())
+    .then(data => console.log('Vercel serverless alert sent successfully'))
+    .catch(error => console.error('Network dispatch failure:', error));
+
+    // Render dynamic completion card detailing what was requested
+    const summaryHTML = `
+        <div style="background: rgba(15, 23, 42, 0.4); padding: 15px; border-radius: 8px; text-align: left; margin: 15px 0; border: 1px solid rgba(255,255,255,0.05);">
+            <p><strong>Customer:</strong> ${name}</p>
+            <p><strong>Contact:</strong> ${phone}</p>
+            <p><strong>Service:</strong> ${currentModel} - ${currentRepair}</p>
+            <p><strong>Requested Slot:</strong> ${date} during ${time}</p>
+            ${notes ? `<p><strong>Notes:</strong> ${notes}</p>` : ''}
+        </div>
+    `;
+    
+    document.getElementById('success-message-content').innerHTML = summaryHTML;
+    document.getElementById('step-booking').classList.add('hidden');
+    document.getElementById('step-success').classList.remove('hidden');
+    history.pushState({ step: 'success' }, '');
+    
+    document.getElementById('repair-booking-form').reset();
+}
