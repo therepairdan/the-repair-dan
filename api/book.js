@@ -1,59 +1,39 @@
 export default async function handler(req, res) {
-    // Only allow secure POST requests containing data
+    // Enable CORS headers so your front-end can talk to your back-end seamlessly
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+    res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method Not Allowed' });
     }
 
-    // Grab the private Resend key you saved in your Vercel Dashboard settings
     const resendApiKey = process.env.RESEND_API_KEY;
     if (!resendApiKey) {
-        console.error("Missing RESEND_API_KEY environment variable");
-        return res.status(500).json({ error: 'Mail server configuration missing' });
+        return res.status(500).json({ error: 'Missing RESEND_API_KEY inside Vercel Environment Variables.' });
     }
 
     try {
         const { customerName, customerPhone, deviceModel, repairType, estimatedPrice, requestedDate, requestedTime, additionalNotes } = req.body;
 
-        // Build a highly structured HTML email format
         const emailHtml = `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;">
                 <h2 style="color: #0ea5e9; margin-bottom: 20px;">🛠️ New Repair Booking Received!</h2>
-                <table style="width: 100%; border-collapse: collapse;">
-                    <tr>
-                        <td style="padding: 8px 0; font-weight: bold; color: #475569; width: 140px;">Customer Name:</td>
-                        <td style="padding: 8px 0; color: #0f172a;">${customerName}</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 8px 0; font-weight: bold; color: #475569;">Phone Number:</td>
-                        <td style="padding: 8px 0; color: #0f172a;"><a href="tel:${customerPhone}">${customerPhone}</a></td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 8px 0; font-weight: bold; color: #475569;">Device Model:</td>
-                        <td style="padding: 8px 0; color: #0f172a;">${deviceModel}</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 8px 0; font-weight: bold; color: #475569;">Repair Type:</td>
-                        <td style="padding: 8px 0; color: #0f172a;">${repairType}</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 8px 0; font-weight: bold; color: #475569;">Est. Price:</td>
-                        <td style="padding: 8px 0; color: #10b981; font-weight: bold;">£${estimatedPrice}</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 8px 0; font-weight: bold; color: #475569;">Requested Slot:</td>
-                        <td style="padding: 8px 0; color: #0f172a;">${requestedDate} (${requestedTime})</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 8px 0; font-weight: bold; color: #475569; vertical-align: top;">Notes:</td>
-                        <td style="padding: 8px 0; color: #64748b; font-style: italic;">${additionalNotes || 'No notes provided.'}</td>
-                    </tr>
-                </table>
-                <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
-                <p style="font-size: 12px; color: #94a3b8; text-align: center;">Sent instantly via your Vercel Dashboard engine.</p>
+                <p><strong>Customer Name:</strong> ${customerName}</p>
+                <p><strong>Phone Number:</strong> ${customerPhone}</p>
+                <p><strong>Device Model:</strong> ${deviceModel}</p>
+                <p><strong>Repair Type:</strong> ${repairType}</p>
+                <p><strong>Est. Price:</strong> £${estimatedPrice}</p>
+                <p><strong>Requested Slot:</strong> ${requestedDate} (${requestedTime})</p>
+                <p><strong>Notes:</strong> ${additionalNotes || 'None'}</p>
             </div>
         `;
 
-        // Send the email using the Resend API
         const response = await fetch('https://api.resend.com/emails', {
             method: 'POST',
             headers: {
@@ -61,21 +41,21 @@ export default async function handler(req, res) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                from: 'onboarding@resend.dev', // Default free tier sender address
-                to: 'YOUR_PERSONAL_EMAIL@GMAIL.COM', // <-- CHANGE THIS to your real email address!
-                subject: `🚨 New Booking: ${customerName} - ${deviceModel}`,
+                from: 'onboarding@resend.dev', 
+                to: 'YOUR_PERSONAL_EMAIL@GMAIL.COM', // <-- DOUBLE CHECK THIS IS YOUR REAL EMAIL!
+                subject: `🚨 New Booking: ${customerName}`,
                 html: emailHtml
             })
         });
 
+        const data = await response.json();
+
         if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || 'Resend delivery dispatch failure');
+            return res.status(response.status).json({ error: data.message || 'Resend error response' });
         }
 
-        return res.status(200).json({ success: true });
+        return res.status(200).json({ success: true, data });
     } catch (error) {
-        console.error('Email processing error:', error);
-        return res.status(500).json({ error: 'Failed to process email dispatch' });
+        return res.status(500).json({ error: error.message || 'Internal processing error' });
     }
 }
